@@ -1,0 +1,68 @@
+﻿@*@model IEnumerable<WebBiblioteca.Models.Prestamo>*@
+@model PagedList.IPagedList<WebBiblioteca.Models.Prestamo>
+@using PagedList.Mvc
+
+@{
+    ViewBag.Title = "Mis préstamos activos";
+}
+
+<h2>Mis préstamos activos</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Libro</th>
+            <th>Fecha préstamo</th>
+            <th>Días restantes</th>
+            <th>Estado</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            var estado = p.Estado;
+            var fecha = p.FechaPrestamo ?? p.FechaSolicitud;
+            var diasRestantes = (p.FechaPrestamo.HasValue)
+                ? (p.FechaPrestamo.Value.AddDays(p.DuracionDias) - DateTime.Now).Days
+                : (int?)null;
+
+            <tr>
+                <td>@p.Libro.Titulo</td>
+                @*<td>@fecha?.ToShortDateString()</td>*@
+                <td>@fecha</td>
+                <td>
+                    @(diasRestantes.HasValue
+                ? (diasRestantes < 0 ? "Vencido" : diasRestantes + " días")
+                : "En espera")
+                </td>
+                <td>@estado</td>
+                <td>
+                    @if (p.FechaPrestamo.HasValue && !p.FechaDevolucion.HasValue)
+                    {
+                        @Html.BeginForm("Devolver", "Prestamo", FormMethod.Post)
+                        {
+                            @Html.Hidden("id", p.Id)
+                            <button type="submit" class="btn btn-warning btn-sm">Devolver</button>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@Html.PagedListPager(
+    Model,
+    page => Url.Action("MiPrestamo", new { page }),
+    new PagedListRenderOptions
+    {
+        UlElementClasses = new[] { "pagination", "justify-content-center", "mt-4" },
+        LiElementClasses = new[] { "page-item" },
+        DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+        DisplayLinkToLastPage = PagedListDisplayMode.Always,
+        DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+        DisplayLinkToNextPage = PagedListDisplayMode.Always,
+        DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+        MaximumPageNumbersToDisplay = 5
+})

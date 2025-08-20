@@ -1,0 +1,80 @@
+﻿@*@model IEnumerable<WebBiblioteca.Models.ViewModels.UsuarioViewModel>*@
+@model PagedList.IPagedList<WebBiblioteca.Models.ViewModels.UsuarioViewModel>
+@using PagedList.Mvc
+
+
+@{
+    ViewBag.Title = "Usuarios";
+}
+
+<h2>Usuarios</h2>
+
+@using (Html.BeginForm("Index", "Usuario", FormMethod.Get))
+{
+    <div class="form-inline mb-3">
+        <input type="text" name="nombre" value="@Request["nombre"]" class="form-control me-2" placeholder="Buscar por nombre" />
+        <input type="text" name="correo" value="@Request["correo"]" class="form-control me-2" placeholder="Buscar por email" />
+
+        <input type="date" name="fechaInicio" value="@Request["fechaInicio"]" class="form-control me-2" />
+        <input type="date" name="fechaFin" value="@Request["fechaFin"]" class="form-control me-2" />
+
+        <label class="me-2">
+            <input type="checkbox" name="bloqueado" value="true" @(Request["bloqueado"] == "true" ? "checked" : "") />
+            Solo bloqueados
+        </label>
+
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </div>
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Fecha registro</th>
+            <th>Bloqueado hasta</th>
+            <th>¿Está bloqueado?</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.NombreCompleto</td>
+                <td>@item.Email</td>
+                <td>@item.FechaRegistro.ToShortDateString()</td>
+                <td>
+                    @(item.BloqueadoHasta.HasValue ? item.BloqueadoHasta.Value.ToShortDateString() : "-")
+                </td>
+                <td>
+                    @(item.BloqueadoHasta.HasValue && item.BloqueadoHasta > DateTime.Now ? "Sí" : "No")
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+@*Paginación*@
+@Html.PagedListPager(Model, page => Url.Action("Index", new
+{
+    page,
+    nombre = Request["nombre"],
+    correo = Request["correo"],
+    fechaInicio = Request["fechaInicio"],
+    fechaFin = Request["fechaFin"],
+    bloqueado = Request["bloqueado"]
+}), new PagedListRenderOptions
+{
+    UlElementClasses = new[] { "pagination", "justify-content-center", "mt-4" },
+    DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+    DisplayLinkToLastPage = PagedListDisplayMode.Always,
+    DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+    DisplayLinkToNextPage = PagedListDisplayMode.Always,
+    DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+    MaximumPageNumbersToDisplay = 5
+})
+
+

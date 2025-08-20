@@ -1,0 +1,27 @@
+﻿@model WebBiblioteca.Models.ViewModels.EstadisticasViewModel
+
+<div class="card border-primary mb-4">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Panel de Estadísticas</h4>
+    </div>
+    <div class="card-body">
+        <p><strong>Total de libros:</strong> @Model.TotalLibros</p>
+        <p><strong>Préstamos activos:</strong> @Model.PrestamosActivos</p>
+        <p><strong>Préstamos pendientes de activar:</strong> @Model.PrestamosPendientes</p>
+        <p><strong>Préstamos vencidos:</strong> @Model.PrestamosVencidos</p>
+        <p><strong>Préstamos con incidencia:</strong> @Model.PrestamosConIncidencia</p>
+        <p><strong>Total de usuarios:</strong> @Model.TotalUsuarios</p>
+
+        <h5 class="mt-4">Libros más demandados</h5>
+        <ul class="list-group">
+            @foreach (var libro in Model.LibrosMasDemandados)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    @libro.Titulo
+                    <span class="badge bg-primary rounded-pill">@libro.VecesPrestado</span>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+

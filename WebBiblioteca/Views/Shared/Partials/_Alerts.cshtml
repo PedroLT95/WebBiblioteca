@@ -1,0 +1,30 @@
+﻿@*  _Alerts.cshtml  –  Bootstrap 5 alerts reutilizables  *@
+@{
+    // Lee los mensajes que cualquier acción haya dejado en TempData
+    var success = TempData["Success"] as string;   // mensaje verde
+    var error = TempData["Error"] as string;   // mensaje rojo
+    var info = TempData["Info"] as string;   // opcional: azul
+}
+
+@if (success != null)
+{
+    <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <i class="fa-solid fa-circle-check me-2"></i> @success
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (error != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+        <i class="fa-solid fa-triangle-exclamation me-2"></i> @error
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (info != null)
+{
+    <div class="alert alert-info alert-dismissible fade show shadow-sm" role="alert">
+        <i class="fa-solid fa-circle-info me-2"></i> @info
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+

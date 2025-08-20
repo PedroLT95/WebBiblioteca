@@ -1,0 +1,72 @@
+@model WebBiblioteca.Models.Prestamo
+
+@{
+    ViewBag.Title = "Eliminar Préstamo";
+}
+
+<h2>Eliminar Préstamo</h2>
+
+<h3>¿Está seguro que desea eliminar este préstamo?</h3>
+<div>
+    <h4>Préstamo</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Libro.Titulo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Libro.Titulo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Usuario.NombreCompleto)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Usuario.NombreCompleto)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaSolicitud)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FechaSolicitud)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaPrestamo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FechaPrestamo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaDevolucion)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FechaDevolucion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Incidencia)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Incidencia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DuracionDias)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DuracionDias)
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+            @Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    }
+</div> 

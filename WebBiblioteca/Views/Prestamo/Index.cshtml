@@ -1,0 +1,158 @@
+@*@model IEnumerable<WebBiblioteca.Models.Prestamo>*@
+@model PagedList.IPagedList<WebBiblioteca.Models.Prestamo>
+@using PagedList.Mvc
+
+
+@{
+    ViewBag.Title = "Préstamos";
+}
+
+<h2>Préstamos</h2>
+
+<p>
+    @Html.ActionLink("Crear Nuevo", "Create", null, new { @class = "btn btn-primary" })
+</p>
+
+@using (Html.BeginForm("Index", "Prestamo", FormMethod.Get, new { @class = "row g-2 mb-3" }))
+{
+    <div class="col-md-3">
+        @Html.TextBox("correo", ViewBag.Correo as string,
+                      new { @class = "form-control", placeholder = "Buscar por correo" })
+    </div>
+    <div class="col-md-2">
+        @Html.TextBox("fechaInicio", ViewBag.FechaInicio as string,
+                      new { @type = "date", @class = "form-control" })
+    </div>
+    <div class="col-md-2">
+        @Html.TextBox("fechaFin", ViewBag.FechaFin as string,
+                      new { @type = "date", @class = "form-control" })
+    </div>
+    <div class="col-md-2">
+        @Html.TextBox("diasRestantesMax", ViewBag.DiasMax as string,
+                      new
+                           {
+                               @type = "number",
+                               @class = "form-control",
+                            placeholder = "Días ≤"
+                           })
+    </div>
+    <div class="col-md-2 form-check align-self-center">
+        <input class="form-check-input" type="checkbox"
+               id="soloIncid" name="soloIncidencias"
+               @( ((bool?)ViewBag.SoloIncidencias) == true ? "checked" : "") />
+        <label class="form-check-label" for="soloIncid">Incidencias</label>
+    </div>
+    <div class="col-md-1">
+        <button class="btn btn-primary w-100">Filtrar</button>
+    </div>
+}
+
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>@Html.DisplayNameFor(m => m.First().Libro.Titulo)</th>
+                <th>@Html.DisplayNameFor(m => m.First().Usuario.NombreCompleto)</th>
+                <th>@Html.DisplayNameFor(m => m.First().FechaSolicitud)</th>
+                <th>@Html.DisplayNameFor(m => m.First().FechaPrestamo)</th>
+                <th>@Html.DisplayNameFor(m => m.First().FechaDevolucion)</th>
+                <th>@Html.DisplayNameFor(m => m.First().Incidencia)</th>
+                <th>@Html.DisplayNameFor(m => m.First().DuracionDias)</th>
+                <th>Días restantes</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="8" class="text-center">No hay préstamos para mostrar</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Libro.Titulo)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Usuario.NombreCompleto)</td>
+                        <td>@(item.FechaSolicitud?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
+                        <td>@(item.FechaPrestamo?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
+                        <td>@(item.FechaDevolucion?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
+                        <td>
+                            @if (item.Incidencia)
+                            {
+                                <span class="badge bg-danger">Sí</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">No</span>
+                            }
+                        </td>
+
+                        <td class="text-center">
+                            @{
+                                if (item.FechaPrestamo != null && item.FechaDevolucion == null)
+                                {
+                                    var resto = (item.FechaPrestamo.Value
+                                                 .AddDays(item.DuracionDias) - DateTime.Now).Days;
+                                    @resto
+                                }
+                                else
+                                { @("-") }
+                            }
+                        </td>
+
+                        <td>@item.DuracionDias días</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                @Html.ActionLink("Editar", "Edit", new { id = item.Id }, new { @class = "btn btn-warning btn-sm" })
+                                @Html.ActionLink("Detalles", "Details", new { id = item.Id }, new { @class = "btn btn-info btn-sm" })
+                                @Html.ActionLink("Eliminar", "Delete", new { id = item.Id }, new { @class = "btn btn-danger btn-sm" })
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@*@if (Model.PageCount > 1)
+    {
+        <div class="d-flex justify-content-center">
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page }),
+                new PagedListRenderOptions
+                {
+                    UlElementClasses = new[] { "pagination", "justify-content-center", "mt-4" },
+                    LiElementClasses = new[] { "page-item" },
+                    DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+                    DisplayLinkToLastPage = PagedListDisplayMode.Always,
+                    DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+                    DisplayLinkToNextPage = PagedListDisplayMode.Always,
+                    DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+                    MaximumPageNumbersToDisplay = 5,
+
+                    //PageClasses = new[] { "page-link" }
+                })
+        </div>
+    }*@
+
+@Html.PagedListPager(Model, page =>
+     Url.Action("Index", new
+     {
+         page,
+         correo = ViewBag.Correo,
+         fechaInicio = ViewBag.FechaInicio,
+         fechaFin = ViewBag.FechaFin,
+         soloIncidencias = ViewBag.SoloIncidencias,
+         diasRestantesMax = ViewBag.DiasMax
+     }),
+     new PagedListRenderOptions
+     {
+         UlElementClasses = new[] { "pagination", "justify-content-center" },
+         LiElementClasses = new[] { "page-item" },
+         //PageClasses = new[] { "page-link" }
+     })
+

@@ -1,0 +1,26 @@
+﻿/* custom.css  — solo sobreescribe tokens Bootstrap 5  */
+:root {
+    /* Colores corporativos WebBiblioteca */
+    --bs-primary: #006699; /* azul bibliotecario */
+    --bs-secondary: #ffb84d; /* naranja acento */
+    --bs-success: #4caf50;
+    --bs-danger: #dc3545;
+    --bs-warning: #ffc107;
+    --bs-info: #0dcaf0;
+    /* Fuente principal (cambia ‘Inter’ si prefieres otra) */
+    /*--bs-font-sans-serif: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;*/
+}
+
+/* Sombras suaves para cards & modals */
+.shadow-soft {
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
+}
+
+/* Navbar más alta */
+.navbar-brand {
+    font-weight: 600
+}
+
+.footer {
+    bottom: 0;
+}

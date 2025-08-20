@@ -1,0 +1,91 @@
+﻿@model WebBiblioteca.Models.Libro
+
+@{
+    ViewBag.Title = "Details";
+}
+
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-info">@TempData["Mensaje"]</div>
+}
+
+
+<h2>Details</h2>
+
+<div>
+    <h4>Libro</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.categoria.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.categoria.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Titulo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Titulo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Autor)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Autor)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Anyo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Anyo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ISBN)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ISBN)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Stock)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Stock)
+        </dd>
+
+    </dl>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        if (Model.Stock > 0)
+        {
+            <form method="post" action="@Url.Action("SolicitarPrestamo", "Libro", new { id = Model.Id })">
+                <button type="submit" class="btn btn-primary">Solicitar préstamo</button>
+            </form>
+        }
+        else
+        {
+            <p><strong>No disponible: sin stock</strong></p>
+        }
+    }
+    else
+    {
+        <p><em>Inicia sesión para solicitar este libro</em></p>
+    }
+
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

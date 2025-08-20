@@ -1,0 +1,66 @@
+@model WebBiblioteca.Models.Prestamo
+
+@{
+    ViewBag.Title = "Detalles del Préstamo";
+}
+
+<h2>Detalles del Préstamo</h2>
+
+<div>
+    <h4>Préstamo</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Libro.Titulo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Libro.Titulo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Usuario.NombreCompleto)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Usuario.NombreCompleto)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaSolicitud)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FechaSolicitud)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaPrestamo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FechaPrestamo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaDevolucion)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FechaDevolucion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Incidencia)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Incidencia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DuracionDias)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DuracionDias)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning" }) |
+    @Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-default" })
+</p> 

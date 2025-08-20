@@ -1,0 +1,72 @@
+﻿@using Microsoft.AspNet.Identity
+@{
+    var isAuthenticated = Request.IsAuthenticated;
+    var userName = User.Identity.GetUserName();
+    var isAdmin = User.IsInRole("Administrador");
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Web Biblioteca</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+        <div class="container">
+            @Html.ActionLink("WebBiblioteca", "Index", "Home", null, new { @class = "navbar-brand" })
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                    title="Alternar navegación" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li>@Html.ActionLink("Inicio", "Index", "Home", null, new { @class = "nav-link" })</li>
+
+                    @if (isAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Libros", "Index", "Libro", null, new { @class = "nav-link" })</li>
+
+                        if (isAdmin)
+                        {
+                            <li>@Html.ActionLink("Categorías", "Index", "Categoria", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Préstamos pendientes", "Pendiente", "Prestamo", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Todos los préstamos", "Index", "Prestamo", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Usuarios", "Index", "Usuario", null, new { @class = "nav-link" })</li>
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink("Mis préstamos", "MiPrestamo", "Prestamo", null, new { @class = "nav-link" })</li>
+                        }
+                    }
+
+                    <li>@Html.ActionLink("Contacto", "Contact", "Home", null, new { @class = "nav-link" })</li>
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container body-content">
+        @Html.Partial("~/Views/Shared/Partials/_Alerts.cshtml")
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - WebBiblioteca ASP.NET</p>
+            <p>Designed by PedroLT</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
